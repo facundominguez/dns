@@ -20,11 +20,20 @@ Tested-With:            GHC == 8.0.2
                       , GHC == 8.6.5
                       , GHC == 8.8.1
 
-Library dns-internal
+Library
   Default-Language:     Haskell2010
   GHC-Options:          -Wall
-  Hs-Source-Dirs:       internal
-  Exposed-Modules:      Network.DNS.Imports
+  Hs-Source-Dirs:       ., internal
+  Exposed-Modules:      Network.DNS
+                        Network.DNS.Lookup
+                        Network.DNS.LookupRaw
+                        Network.DNS.Resolver
+                        Network.DNS.Utils
+                        Network.DNS.Types
+                        Network.DNS.Decode
+                        Network.DNS.Encode
+                        Network.DNS.IO
+                        Network.DNS.Imports
                         Network.DNS.Types.Internal
                         Network.DNS.Types.Resolver
                         Network.DNS.Resolver.Internal
@@ -35,40 +44,8 @@ Library dns-internal
                         Network.DNS.StateBinary
                         Network.DNS.Memo
                         Network.DNS.Base32Hex
-  Build-Depends:        base
-                      , array
-                      , async
-                      , attoparsec
-                      , auto-update
-                      , base16-bytestring
-                      , base64-bytestring
-                      , bytestring
-                      , containers
-                      , cryptonite
-                      , hourglass
-                      , iproute
-                      , mtl
-                      , network
-                      , psqueues
-  if os(windows)
-    C-Sources:        cbits/dns.c
-    Extra-Libraries:  iphlpapi
-
-Library
-  Default-Language:     Haskell2010
-  GHC-Options:          -Wall
-  Exposed-Modules:      Network.DNS
-                        Network.DNS.Lookup
-                        Network.DNS.LookupRaw
-                        Network.DNS.Resolver
-                        Network.DNS.Utils
-                        Network.DNS.Types
-                        Network.DNS.Decode
-                        Network.DNS.Encode
-                        Network.DNS.IO
   Other-Modules:        Network.DNS.Transport
-  Build-Depends:        dns-internal
-                      , base >= 4 && < 5
+  Build-Depends:        base >= 4 && < 5
                       , array
                       , async
                       , attoparsec
@@ -83,6 +60,9 @@ Library
                       , mtl
                       , network >= 2.3
                       , psqueues
+  if os(windows)
+    C-Sources:        cbits/dns.c
+    Extra-Libraries:  iphlpapi
 
 Test-Suite network-tests
   Type:                 exitcode-stdio-1.0
@@ -93,7 +73,6 @@ Test-Suite network-tests
   Other-Modules:        LookupSpec
                         IOSpec
   Build-Depends:        dns
-                      , dns-internal
                       , base
                       , hspec
                       , network
@@ -108,7 +87,6 @@ Test-Suite spec-tests
                         DecodeSpec
                         RoundTripSpec
   Build-Depends:        dns
-                      , dns-internal
                       , QuickCheck >= 2.9
                       , base
                       , bytestring
